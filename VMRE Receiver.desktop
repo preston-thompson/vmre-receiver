@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1
+Type=Application
+Path=/home/rasc/vmre-receiver
+Exec=gnome-terminal -e 'bash -c "python3 /home/rasc/vmre-receiver/vmre-receiver.py; read line"'
+Name=VMRE Receiver
+Icon=/usr/share/icons/gnome/64x64/apps/gnuradio-grc.png
+

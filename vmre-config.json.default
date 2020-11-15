@@ -1,0 +1,12 @@
+{
+    "bandwidth": 2000,
+    "center_frequency": 66.310E6,
+    "sample_rate": 2.56E6,
+    "transition_width": 200,
+    "frequency_offset": 0,
+    "station_id": 0,
+    "station_grid": "",
+    "station_owner": "Your name",
+    "station_radio": "Description of the radio setup",
+    "sdr": "rtlsdr"
+}
