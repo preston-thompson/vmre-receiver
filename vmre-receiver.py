@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
@@ -16,24 +16,20 @@ import os
 
 class top_block(gr.top_block):
 
-    def __init__(self):
+    def __init__(self, filename, config):
         gr.top_block.__init__(self, "Top Block")
-
-        config = json.load(open("vmre-config.json", "r"))
-        config["datetime_started"] = datetime.now().strftime("%Y-%m-%d_%H-%M-%S.%f")
 
         ##################################################
         # Variables
         ##################################################
         self.pass_band = pass_band = config["bandwidth"]
         self.center_freq = center_freq = config["center_frequency"]
-        self.output_path = output_path = ".//data//"
+        self.output_path = output_path = "data/"
         self.transition_width = transition_width = config["transition_width"]
         self.samp_rate = samp_rate = config["sample_rate"]
-        self.iq_filename = iq_filename = output_path + config["datetime_started"] + ".dat"
+        self.iq_filename = iq_filename = output_path + filename + ".dat"
         self.freq_offset = freq_offset = config["frequency_offset"]
 
-        json.dump(config, open(output_path + config["datetime_started"] + ".json", "w"))
 
         ##################################################
         # Blocks
@@ -68,14 +64,28 @@ def main(top_block_cls=top_block, options=None):
         os.makedirs("data")
 
     while True:
-        tb = top_block_cls()
-        start_time = time.time()
+
+        config = json.load(open("vmre-config.json", "r"))
+        filename = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+        tb = top_block_cls(filename, config)
+
         tb.start()
+        config["datetime_started"] = datetime.now().strftime("%Y-%m-%d_%H-%M-%S.%f")
+        start_time = time.time()
+
+        json.dump(config, open("data/" + filename + ".json", "w"))
+
+        print(f"Time is now {datetime.now()}")
+
         while time.time() - start_time < 24*60*60:
             time.sleep(60)
+
         print("Time is %s. Starting a new file..." % (datetime.now()))
+
         tb.stop()
         tb.wait()
+
         del tb
 
 if __name__ == '__main__':
